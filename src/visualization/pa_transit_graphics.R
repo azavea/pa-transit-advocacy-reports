@@ -43,7 +43,7 @@ for (i in seq_along(dat$district_id)) {
     ggplot(dat, aes(x=district_id, y=mean_performance_decimal, fill=selected))+
     geom_bar(width = 0.7, stat="identity",position="identity")+
     theme_wsj()+
-    theme(axis.text.x = element_text(angle = 0, hjust = 1),
+    theme(axis.text.x = element_text(angle = 0, hjust = 0.35),
           legend.position="none",
           panel.background = element_rect(fill = "#ffffff", colour = NA),
           rect = element_rect(fill = "#ffffff", colour = NA)
