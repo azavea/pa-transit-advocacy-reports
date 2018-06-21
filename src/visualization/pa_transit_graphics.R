@@ -1,25 +1,26 @@
 library(ggplot2)
 library(ggthemes)
 library(dplyr)
+library(scales)
 #library(svglite)
 
 # read in data
 dat <- read.csv('../../data/processed/CouncilDistrict_RouteStats.csv')
 
-# create a name field with the district id
-dat <- dat %>% mutate(district_name = paste0("District", " ", district_id))
+# create a variable with the percentage value as a decimal.
+# this is used in place of mean_performance so that the scales function can be used to create % label on the y-axis
+dat <- dat %>% mutate(mean_performance_decimal = (mean_performance / 100))
 
-# dictate which order to chart each district in the graph
-dat$district_name <-factor(dat$district_name, levels=c('District 1', 'District 2', 'District 3', 'District 4', 'District 5', 
-                                                       'District 6', 'District 7', 'District 8', 'District 9', 'District 10'))
+# dictate which order to chart each district and treat as a string rather than integer
+dat$district_id <-factor(dat$district_id, levels=c('1', '2', '3', '4', '5', '6', '7', '8', '9', '10'))
 
 # calculate max y-axis, min y-axis, and city average for mean performance
-max <- (max(dat$mean_performance) + 5)
-min <- (min(dat$mean_performance) - 10)
-city_mean <- mean(dat$mean_performance)
+max <- (max(dat$mean_performance_decimal) + .05)
+min <- (min(dat$mean_performance_decimal) - .10)
+city_mean <- mean(dat$mean_performance_decimal)
 
 # define target performance value
-target <- 80
+target <- 0.8
 
 # create variables for the colors of selected bar, not select bars, horizontal city average line, and target performance line
 selected_color <- '#00c5ff'
@@ -39,7 +40,7 @@ for (i in seq_along(dat$district_id)) {
   
   # create the plot
   plot <- 
-    ggplot(dat, aes(x=district_id, y=mean_performance, fill=selected))+
+    ggplot(dat, aes(x=district_id, y=mean_performance_decimal, fill=selected))+
     geom_bar(width = 0.7, stat="identity",position="identity")+
     theme_wsj()+
     theme(axis.text.x = element_text(angle = 0, hjust = 1),
@@ -52,10 +53,11 @@ for (i in seq_along(dat$district_id)) {
     geom_text(aes(1, city_mean, label = 'average', vjust = 1.25))+
     geom_hline(yintercept = target, colour = target_color, size=1)+
     geom_text(aes(1, target, label = 'target', vjust = 1.25))+
-    
     # optional chart title
     #labs(title="Philadelphia Tranist Grades", subtitle=paste0("How City Council District ", district, " Stacks Up"))+
-    scale_fill_manual(values = c(not_selected_color, selected_color))
+    scale_fill_manual(values = c(not_selected_color, selected_color))+
+    # convert mean_performance_decimal into a percentage for the label
+    scale_y_continuous(labels = scales::percent)
   
   # for viewing in the side panel only
   print(plot)
