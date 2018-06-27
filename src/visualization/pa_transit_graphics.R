@@ -14,15 +14,13 @@ dat <- dat %>% mutate(mean_performance_decimal = (mean_performance / 100))
 # dictate which order to chart each district and treat as a string rather than integer
 dat$district_id <-factor(dat$district_id, levels=c('1', '2', '3', '4', '5', '6', '7', '8', '9', '10'))
 
-# calculate max y-axis, min y-axis, and city average for mean performance
-max <- (max(dat$mean_performance_decimal) + .05)
-min <- (min(dat$mean_performance_decimal) - .10)
-city_mean <- mean(dat$mean_performance_decimal)
-
-# define target performance value
+# define max y-axis, min y-axis, city mean performance, and target performance value
+max <- 0.85
+min <- 0.6
+city_mean <- 0.767
 target <- 0.8
 
-# create variables for the colors of selected bar, not select bars, horizontal city average line, and target performance line
+# create variables for the colors of selected bar, not select bars, horizontal city average performance line, and target performance line
 selected_color <- '#00c5ff'
 not_selected_color <- '#ced6dc'
 city_avg_color <- '#323232'
