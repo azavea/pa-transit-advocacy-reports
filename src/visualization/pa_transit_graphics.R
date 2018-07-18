@@ -21,10 +21,10 @@ city_mean <- 0.767
 target <- 0.8
 
 # create variables for the colors of selected bar, not select bars, horizontal city average performance line, and target performance line
-selected_color <- '#00c5ff'
+selected_color <- '#4d6379'
 not_selected_color <- '#ced6dc'
 city_avg_color <- '#323232'
-target_color <- '#00eb56'
+target_color <- '#00c5ff'
 
 # for loop to create and save all of the graphics
 for (i in seq_along(dat$district_id)) { 
@@ -45,7 +45,7 @@ for (i in seq_along(dat$district_id)) {
           legend.position="none",
           panel.background = element_rect(fill = "#ffffff", colour = NA),
           rect = element_rect(fill = "#ffffff", colour = NA)
-          )+
+    )+
     coord_cartesian(ylim = c(min, max))+
     geom_hline(yintercept = city_mean, colour = city_avg_color, size=1)+
     geom_text(aes(1, city_mean, label = 'average', vjust = 1.25))+
